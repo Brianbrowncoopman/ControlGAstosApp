@@ -7,13 +7,13 @@ plugins {
 
 android {
     namespace = "cl.brbc.example.controlgastosapp"
-    compileSdk {
-        version = release(36)
-    }
+    // CORRECCIÓN: Sintaxis simple para compileSdk
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "cl.brbc.example.controlgastosapp"
         minSdk = 24
+        // CORRECCIÓN: targetSdk debe ser un número (35 es el estándar actual)
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -43,6 +43,7 @@ android {
 }
 
 dependencies {
+    // Librerías base desde el catálogo
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -51,10 +52,18 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
-    //esta deberia borrarla
-    implementation(libs.androidx.room.common.jvm)
-    implementation(libs.androidx.material3)
 
+    // Room - Versión unificada y limpia
+    val room_version = "2.6.1"
+    implementation("androidx.room:room-runtime:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
+
+    // Navegación y ViewModel
+    implementation("androidx.navigation:navigation-compose:2.8.4")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.4")
+
+    // Testeo
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -62,30 +71,4 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
-
-    //Navegacion Compose
-    implementation("androidx.navigation:navigation-compose:2.7.6")
-
-    //soporte viewmodel
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.4")
-
-    //Room
-    val room_version = "2.6.1"
-
-    implementation("androidx.room:room-runtime:$room_version")
-    implementation("androidx.room:room-ktx:${room_version}")
-    // para trabajar con ksp
-    //add("ksp", "androidx.room:room-compiler:$room_version")
-    ksp("androidx.room:room-compiler:$room_version")
-    // If this project only uses Java source, use the Java annotationProcessor
-    // No additional plugins are necessary
-    annotationProcessor("androidx.room:room-compiler:$room_version")
-    // optional - Kotlin Extensions and Coroutines support for Room
-    implementation("androidx.room:room-ktx:$room_version")
-
-    /*val room_version = "2.6.1"
-    implementation("androidx.room:room-runtime:$room_version")
-    implementation("androidx.room:room-ktx:$room_version")
-    ksp("androidx.room:room-compiler:$room_version")*/
-
 }
