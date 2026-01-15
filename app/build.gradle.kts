@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("com.google.devtools.ksp") version "1.9.21-1.0.15" // La versión  tu Kotlin
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     //esta deberia borrarla
     implementation(libs.androidx.room.common.jvm)
+    implementation(libs.androidx.material3)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -74,7 +75,8 @@ dependencies {
     implementation("androidx.room:room-runtime:$room_version")
     implementation("androidx.room:room-ktx:${room_version}")
     // para trabajar con ksp
-    add("ksp", "androidx.room:room-compiler:$room_version")
+    //add("ksp", "androidx.room:room-compiler:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
     // If this project only uses Java source, use the Java annotationProcessor
     // No additional plugins are necessary
     annotationProcessor("androidx.room:room-compiler:$room_version")
