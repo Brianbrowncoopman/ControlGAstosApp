@@ -1,24 +1,20 @@
 package cl.brbc.example.controlgastosapp
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cl.brbc.example.controlgastosapp.data.Medicion
-import cl.brbc.example.controlgastosapp.MedicionViewModel
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun FormularioMedicionSceen(
@@ -26,44 +22,108 @@ fun FormularioMedicionSceen(
     onVolver: () -> Unit
 ) {
     var valor by remember { mutableStateOf("") }
-    var tipo by remember { mutableStateOf("") }
+    // Mantenemos la fecha como String para el TextField
+    var fechaTexto by remember { mutableStateOf(LocalDate.now().toString()) }
 
-    Column (
+    val opcionesTipo = listOf(
+        stringResource(R.string.type_water),
+        stringResource(R.string.type_light),
+        stringResource(R.string.type_gas)
+    )
+    val (tipoSeleccionado, onTipoSelected) = remember { mutableStateOf(opcionesTipo[0]) }
+
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ){
-        Text(text = "Registrar Nueva Medicion", style = MaterialTheme.typography.headlineMedium)
-        // campo para el valor
-        OutlinedTextField(
-            value = valor,
-            onValueChange = {valor = it},
-            label = {Text("Valor del emdidor")},
-            modifier = Modifier.fillMaxWidth()
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = stringResource(R.string.title_form),
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 32.dp)
         )
 
-        //campo para el Tipo
         OutlinedTextField(
-            value = tipo,
-            onValueChange = {tipo = it},
-            label = {Text("Tipo de Medidor")},
-            modifier = Modifier.fillMaxWidth()
+            value = valor,
+            onValueChange = { valor = it },
+            label = { Text(stringResource(R.string.label_value)) },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
         )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedTextField(
+            value = fechaTexto,
+            onValueChange = { fechaTexto = it },
+            label = { Text(stringResource(R.string.label_date)) },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Esta es la línea que daba error (ahora debe existir en strings.xml)
+        Text(
+            text = stringResource(R.string.label_meter),
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Start
+        )
+
+        Column(Modifier.selectableGroup().fillMaxWidth()) {
+            opcionesTipo.forEach { texto ->
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .height(48.dp)
+                        .selectable(
+                            selected = (texto == tipoSeleccionado),
+                            onClick = { onTipoSelected(texto) },
+                            role = Role.RadioButton
+                        )
+                        .padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RadioButton(
+                        selected = (texto == tipoSeleccionado),
+                        onClick = null
+                    )
+                    Text(
+                        text = texto,
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.padding(start = 16.dp)
+                    )
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(32.dp))
 
         Button(
             onClick = {
+                // SOLUCIÓN AL TIPO DE DATO: Convertimos String a LocalDate
+                val fechaParsed = try {
+                    LocalDate.parse(fechaTexto)
+                } catch (e: Exception) {
+                    LocalDate.now()
+                }
+
                 val nuevaMedicion = Medicion(
-                    tipo = tipo,
+                    tipo = tipoSeleccionado,
                     valor = valor.toIntOrNull() ?: 0,
-                    fecha = LocalDate.now()
+                    fecha = fechaParsed // Ahora sí es LocalDate
                 )
                 viewModel.insertarMedicion(nuevaMedicion)
                 onVolver()
             },
-            modifier = Modifier.fillMaxWidth()
-        ){
-            Text("Guardar registro")
+            modifier = Modifier
+                .width(200.dp)
+                .height(48.dp),
+            shape = MaterialTheme.shapes.extraLarge
+        ) {
+            Text(stringResource(R.string.btn_save))
         }
     }
 }

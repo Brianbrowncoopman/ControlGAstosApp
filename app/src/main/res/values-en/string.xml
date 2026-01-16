@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Expense Control</string>
+    <string name="title_list">Measurement History</string>
+    <string name="title_form">Meter Registry</string>
+    <string name="label_value">Meter</string>
+    <string name="label_date">Date</string>
+    <string name="btn_save">Register measurement</string>
+    <string name="type_water">Water</string>
+    <string name="type_light">Electricity</string>
+    <string name="type_gas">Gas</string>
+    <string name="label_meter">Meter type:</string>
+</resources>

@@ -1,3 +1,12 @@
 <resources>
-    <string name="app_name">ControlGAstosApp</string>
+    <string name="app_name">Control de Gastos</string>
+    <string name="title_list">Historial de Mediciones</string>
+    <string name="title_form">Registro Medidor</string>
+    <string name="label_value">Medidor</string>
+    <string name="label_date">Fecha</string>
+    <string name="btn_save">Registrar medición</string>
+    <string name="type_water">Agua</string>
+    <string name="type_light">Luz</string>
+    <string name="type_gas">Gas</string>
+    <string name="label_meter">Medidor de :</string>
 </resources>
