@@ -28,4 +28,6 @@ class MedicionViewModel(private val medicionDao: MedicionDao): ViewModel() {
             medicionDao.eliminar(medicion)
         }
     }
+
+
 }

@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -46,7 +47,10 @@ fun ListaMedicionesScreen(
                 .fillMaxSize()
         ) {
             items(listaMediciones) { medicion ->
-                MedicionItem(medicion)
+                MedicionItem(
+                    medicion = medicion,
+                    onBorrar = { viewModel.eliminarMedicion(it) }
+                )
                 HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), thickness = 0.5.dp)
             }
         }
@@ -54,7 +58,7 @@ fun ListaMedicionesScreen(
 }
 
 @Composable
-fun MedicionItem(medicion: Medicion) {
+fun MedicionItem(medicion: Medicion, onBorrar: (Medicion) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -92,11 +96,21 @@ fun MedicionItem(medicion: Medicion) {
         )
 
         // Línea 92: Aseguramos que el parámetro text sea String
-        Text(
-            text = medicion.fecha.toString(),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.outline
-        )
+        Column(horizontalAlignment = Alignment.End) {
+            Text(
+                text = medicion.fecha.toString(),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.outline
+            )
+
+            IconButton(onClick = { onBorrar(medicion) }) {
+                Icon(
+                    imageVector = androidx.compose.material.icons.Icons.Default.Delete,
+                    contentDescription = "Borrar",
+                    tint = MaterialTheme.colorScheme.error
+                )
+            }
+        }
     }
 }
 
