@@ -9,4 +9,7 @@
     <string name="type_light">Luz</string>
     <string name="type_gas">Gas</string>
     <string name="label_meter">Medidor de :</string>
+    <string name="footer_author">Brian Brown Coopman</string>
+    <string name="footer_version">v1.0 - 2026</string>
+    <string name="footer_app_name">Control Gastos App</string>
 </resources>

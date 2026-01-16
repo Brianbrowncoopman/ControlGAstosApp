@@ -18,7 +18,7 @@
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.ControlGAstosApp"
-            tools:targetApi="o">
+            tools:targetApi="o"> ```
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cl.brbc.example.controlgastosapp.data.Medicion
 import cl.brbc.example.controlgastosapp.R
+import cl.brbc.example.controlgastosapp.ui.theme.FooterApp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,6 +42,9 @@ fun ListaMedicionesScreen(
             FloatingActionButton(onClick = onNavegarAFormulario) {
                 Icon(Icons.Default.Add, contentDescription = null)
             }
+        },
+        bottomBar = {
+            FooterApp()
         }
     ) { padding ->
         // Utilizo una LazyColumn para renderizar solo los elementos visibles en pantalla (eficiencia)
