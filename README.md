@@ -6,6 +6,8 @@ El objetivo principal es permitir un monitoreo constante del consumo mediante un
 
 ---
 
+
+
 ## 🚀 Funcionalidades Principales
 
 * **Registro de Mediciones**: Formulario dinámico para ingresar el valor del medidor y la fecha exacta.
