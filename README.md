@@ -6,6 +6,25 @@ El objetivo principal es permitir un monitoreo constante del consumo mediante un
 
 ---
 
+## 📱 Demostración Funcional
+
+
+<div align="center">
+  <video src="https://github.com/Brianbrowncoopman/ControlGAstosApp/releases/download/1.1/gastosApp1.gif" width="320" controls muted loop>
+    Tu navegador no soporta videos embebidos.
+  </video>
+  <br>
+  <em>Vista previa de la gestión de servicios (Agua, Luz, Gas)</em>
+</div>
+
+
+
+
+
+
+
+https://github.com/Brianbrowncoopman/ControlGAstosApp/releases/download/1.1/gastosApp1.gif
+
 
 
 ## 🚀 Funcionalidades Principales
