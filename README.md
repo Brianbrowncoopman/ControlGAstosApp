@@ -64,7 +64,5 @@ Ejecutar en un dispositivo físico o emulador con un mínimo de Android 7.0 (API
 
 ## 📱 Demostración en Vivo
 
-<div align="center">
-  <img src="https://github.com/user-attachments/assets/341fa517-22e4-40c4-abf3-357183af8943" width="300" />
-</div>
+
 
