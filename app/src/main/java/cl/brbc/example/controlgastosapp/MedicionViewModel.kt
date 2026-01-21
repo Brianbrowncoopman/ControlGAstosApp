@@ -4,37 +4,63 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cl.brbc.example.controlgastosapp.data.Medicion
 import cl.brbc.example.controlgastosapp.data.MedicionDao
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-// Defino mi clase ViewModel, la cual se encarga de mantener los datos vivos aunque la pantalla rote.
-// Recibo el 'medicionDao' para poder comunicarme con la base de datos Room.
 class MedicionViewModel(private val medicionDao: MedicionDao): ViewModel() {
 
-    // Aquí creo un flujo de datos (StateFlow) que contiene la lista de todas las mediciones.
-    // Transformo el flujo del DAO en un estado que la interfaz de usuario puede observar fácilmente.
-    val todasLAsMediciones : StateFlow<List<Medicion>> = medicionDao.obtenerTodas()
-        .stateIn(
-            scope = viewModelScope, // Uso el alcance del ViewModel para que el flujo se limpie cuando ya no se use.
-            started = SharingStarted.Companion.WhileSubscribed(5000), // Mantengo el flujo activo 5 segundos después de cerrar la app por eficiencia.
-            initialValue = emptyList() // Comienzo con una lista vacía mientras cargan los datos.
-        )
+    // Estado para el texto de búsqueda que el usuario escribe
+    private val _textoBusqueda = MutableStateFlow("")
+    val textoBusqueda: StateFlow<String> = _textoBusqueda.asStateFlow()
 
-    // Creo esta función para guardar una nueva medición.
+    // Flujo original desde la base de datos
+    private val medicionesBaseDeDatos = medicionDao.obtenerTodas()
+
+    // Flujo filtrado: Combina los datos de la DB con el texto de búsqueda
+    val todasLAsMediciones: StateFlow<List<Medicion>> = combine(
+        medicionesBaseDeDatos,
+        _textoBusqueda
+    ) { lista, texto ->
+        if (texto.isBlank()) {
+            lista
+        } else {
+            lista.filter { medicion ->
+                // Filtra por tipo (Agua, Luz, Gas) o por la fecha (formato texto)
+                medicion.tipo.contains(texto, ignoreCase = true) ||
+                        medicion.fecha.toString().contains(texto)
+            }
+        }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = emptyList()
+    )
+
+    // Función para actualizar el texto de búsqueda desde la pantalla
+    fun actualizarBusqueda(nuevoTexto: String) {
+        _textoBusqueda.value = nuevoTexto
+    }
+
     fun insertarMedicion(medicion: Medicion){
-        // Lanzo una corrutina en el hilo secundario para no bloquear la pantalla mientras se guarda en el disco.
         viewModelScope.launch {
             medicionDao.insertar(medicion)
         }
     }
 
-    // Creo esta función para borrar un registro específico.
     fun eliminarMedicion(medicion: Medicion) {
-        // También uso una corrutina para asegurar que la eliminación ocurra de forma segura fuera del hilo principal.
         viewModelScope.launch {
             medicionDao.eliminar(medicion)
         }
+    }
+
+    fun actualizarMedicion(medicion: Medicion) {
+        viewModelScope.launch {
+            medicionDao.modificar(medicion)
+        }
+    }
+
+    // Para recuperar los datos antes de editar
+    suspend fun obtenerMedicionPorId(id: Int): Medicion? {
+        return medicionDao.obtenerPorId(id)
     }
 }

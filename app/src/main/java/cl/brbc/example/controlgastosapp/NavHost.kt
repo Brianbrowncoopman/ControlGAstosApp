@@ -11,29 +11,31 @@ import androidx.navigation.compose.rememberNavController
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavigation(viewModel: MedicionViewModel){
-    // Inicializo el controlador de navegación que gestionará la pila de pantallas (backstack)
     val navController = rememberNavController()
 
-    // Configuro el NavHost, definiendo que la pantalla de inicio será la "lista"
     NavHost(navController = navController, startDestination = "lista") {
 
-        // Defino la ruta para la Pantalla 1: Lista de mediciones
+        // Pantalla 1: Lista
         composable("lista"){
             ListaMedicionesScreen(
-                viewModel = viewModel, // Le paso el ViewModel para que cargue los datos
-                onNavegarAFormulario = {
-                    // Cuando el usuario presiona el botón "+", le ordeno al controlador ir al formulario
-                    navController.navigate("formulario")
+                viewModel = viewModel,
+                onNavegarAFormulario = { id -> // Especificamos el tipo para evitar el error de inferencia
+                    val medicionId = id ?: -1
+                    navController.navigate("formulario/$medicionId")
                 }
             )
         }
 
-        // Defino la ruta para la Pantalla 2: Formulario de registro
-        composable("formulario"){
+        // Pantalla 2: Formulario
+        composable("formulario/{medicionId}") { backStackEntry ->
+            // Extraemos el ID de la ruta
+            val idString = backStackEntry.arguments?.getString("medicionId") ?: "-1"
+            val id = idString.toInt()
+
             FormularioMedicionSceen(
-                viewModel = viewModel, // Le paso el mismo ViewModel para que pueda guardar la nueva medición
+                viewModel = viewModel,
+                medicionId = id, // Esto ya no dará error si lo agregas en el archivo del formulario
                 onVolver = {
-                    // Cuando el usuario guarda o cancela, quito esta pantalla de la pila para volver atrás
                     navController.popBackStack()
                 }
             )
