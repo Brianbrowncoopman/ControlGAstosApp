@@ -14,18 +14,16 @@ fun AppNavigation(viewModel: MedicionViewModel){
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = "lista") {
-
         // Pantalla 1: Lista
         composable("lista"){
             ListaMedicionesScreen(
                 viewModel = viewModel,
-                onNavegarAFormulario = { id -> // Especificamos el tipo para evitar el error de inferencia
+                onNavegarAFormulario = { id -> // se especifica  el tipo para evitar el error de inferencia
                     val medicionId = id ?: -1
                     navController.navigate("formulario/$medicionId")
                 }
             )
         }
-
         // Pantalla 2: Formulario
         composable("formulario/{medicionId}") { backStackEntry ->
             // Extraemos el ID de la ruta
@@ -34,7 +32,7 @@ fun AppNavigation(viewModel: MedicionViewModel){
 
             FormularioMedicionSceen(
                 viewModel = viewModel,
-                medicionId = id, // Esto ya no dará error si lo agregas en el archivo del formulario
+                medicionId = id,
                 onVolver = {
                     navController.popBackStack()
                 }
