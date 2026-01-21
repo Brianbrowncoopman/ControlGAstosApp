@@ -10,12 +10,13 @@ El objetivo principal es permitir un monitoreo constante del consumo mediante un
 
 
 <div align="center">
-  <video src="https://github.com/Brianbrowncoopman/ControlGAstosApp/releases/download/1.1/gastosApp1.gif" width="320" controls muted loop>
+  <video src="https://github.com/Brianbrowncoopman/ControlGAstosApp/releases/download/1.1/ControlGAstosApp.ListaMedicionesScreen.kt.ControlGAstosApp.app.main.2026-01-20.22-45-39.mp4 " width="320" controls muted loop>
     Tu navegador no soporta videos embebidos.
   </video>
   <br>
   <em>Vista previa de la gestión de servicios (Agua, Luz, Gas)</em>
 </div>
+
 
 
 
